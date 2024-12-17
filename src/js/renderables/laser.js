@@ -1,9 +1,7 @@
-import {Body, collision, game, Rect, Renderable, state} from "melonjs";
-import CONSTANTS from '../constants.js';
-
+import { Body, collision, game, Rect, Renderable, state } from "melonjs";
+import CONSTANTS from "../constants.js";
 
 export class Laser extends Renderable {
-
   constructor(x, y) {
     super(x, y, CONSTANTS.LASER.WIDTH, CONSTANTS.LASER.HEIGHT);
 
@@ -33,14 +31,13 @@ export class Laser extends Renderable {
 
   draw(renderer, viewport) {
     const color = renderer.getColor().clone();
-    renderer.setColor('#5EFF7E');
+    renderer.setColor("#5EFF7E");
     renderer.fillRect(this.pos.x, this.pos.y, this.width, this.height);
     renderer.setColor(color);
     return true;
   }
 
   onCollision(response, other) {
-
     if (other.body.collisionType === collision.types.ENEMY_OBJECT) {
       game.world.removeChild(this);
 
@@ -52,4 +49,3 @@ export class Laser extends Renderable {
 }
 
 export default Laser;
-

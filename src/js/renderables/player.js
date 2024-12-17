@@ -1,8 +1,7 @@
-import {game, loader, Sprite, input, pool} from "melonjs";
+import { game, loader, Sprite, input, pool } from "melonjs";
 import CONSTANTS from "../constants.js";
 
 class PlayerEntity extends Sprite {
-
   /**
    * constructor
    */
@@ -15,28 +14,34 @@ class PlayerEntity extends Sprite {
       {
         image: image,
         framewidth: 32,
-        frameheight: 32
-      }
+        frameheight: 32,
+      },
     );
     this.velx = 450;
-    this.maxX = game.viewport.width -   this.width;
+    this.maxX = game.viewport.width - this.width;
   }
   /**
-    * update the sprite
-    */
+   * update the sprite
+   */
   update(dt) {
     super.update(dt);
 
     if (input.isKeyPressed("left")) {
-        this.pos.x -= this.velx * dt / 1000;
+      this.pos.x -= (this.velx * dt) / 1000;
     }
 
     if (input.isKeyPressed("right")) {
-        this.pos.x += this.velx * dt / 1000;
+      this.pos.x += (this.velx * dt) / 1000;
     }
 
     if (input.isKeyPressed("shoot")) {
-      game.world.addChild(pool.pull("laser", this.getBounds().centerX - CONSTANTS.LASER.WIDTH / 2, this.getBounds().top));
+      game.world.addChild(
+        pool.pull(
+          "laser",
+          this.getBounds().centerX - CONSTANTS.LASER.WIDTH / 2,
+          this.getBounds().top,
+        ),
+      );
     }
 
     // Keep player within bounds

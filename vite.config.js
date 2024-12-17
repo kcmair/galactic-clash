@@ -9,7 +9,7 @@ export default defineConfig({
     emptyOutDir: true,
     manifest: true,
     outDir: "public",
-    target: "es2015"
+    target: "es2015",
   },
   plugins: [
     vitePluginFaviconsInject("./src/favicon/logo.png"),
@@ -20,6 +20,6 @@ export default defineConfig({
           dest: "data/",
         },
       ],
-    })
-  ]
+    }),
+  ],
 });
