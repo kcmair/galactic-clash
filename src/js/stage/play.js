@@ -1,4 +1,4 @@
-import {Stage, game, ColorLayer, input, state} from "melonjs";
+import {Stage, game, ColorLayer, input} from "melonjs";
 import PlayerEntity from "../renderables/player.js";
 import EnemyManager from "../managers/enemy-manager.js";
 import GameOver from "./game-over.js";
