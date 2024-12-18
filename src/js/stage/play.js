@@ -1,15 +1,8 @@
 import { Stage, game, ColorLayer, input } from "melonjs";
 import PlayerEntity from "../renderables/player.js";
 import EnemyManager from "../managers/enemy-manager.js";
-import GameOver from "./game-over.js";
 
 class PlayScreen extends Stage {
-  checkIfLoss(y) {
-    if (y >= this.player.pos.y) {
-      game.world.addChild(new GameOver());
-    }
-  }
-
   onResetEvent(args) {
     this.backgroundColor = new ColorLayer("background", "#000000");
     game.world.addChild(this.backgroundColor, 0);
@@ -30,6 +23,13 @@ class PlayScreen extends Stage {
     input.unbindKey(input.KEY.LEFT);
     input.unbindKey(input.KEY.RIGHT);
     input.unbindKey(input.KEY.SPACE);
+  }
+
+  checkIfLoss(y) {
+    if (y >= this.player.pos.y) {
+      const gameOverScreen = new GameOver();
+      game.world.addChild(gameOverScreen);
+    }
   }
 }
 

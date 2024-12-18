@@ -1,5 +1,6 @@
-import { Container, game, state, timer } from "melonjs";
+import {Container, game, state, timer} from "melonjs";
 import EnemyEntity from "../renderables/enemy.js";
+import GameOver from "../stage/game-over.js";
 
 class EnemyManager extends Container {
   static COLS = 9;
@@ -9,8 +10,6 @@ class EnemyManager extends Container {
     super(16, 32, EnemyManager.COLS * 64 - 32, EnemyManager.ROWS * 64 - 32);
     this.enableChildBoundsUpdate = true;
     this.vel = 16;
-
-    // Add required pooling properties
     this.name = "enemyManager";
     this.className = "EnemyManager";
     this.isPoolable = true;
@@ -31,8 +30,6 @@ class EnemyManager extends Container {
         } else {
           this.vel -= 0.5;
         }
-
-        state.current().checkIfLoss(bounds.bottom);
       } else {
         this.pos.x += this.vel;
       }
@@ -69,6 +66,21 @@ class EnemyManager extends Container {
   onResetEvent() {
     this.vel = 16;
     this.createEnemies();
+  }
+
+  checkEnemyPositions() {
+    if (this.children.length > 0) {
+      const bounds = this.getBounds();
+      if (bounds.bottom >= state.current().player.pos.y) {
+        game.world.addChild(new GameOver());
+      }
+    }
+  }
+
+  update(dt) {
+    this.checkEnemyPositions();
+    super.update(dt);
+    return true;
   }
 }
 

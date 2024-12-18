@@ -1,65 +1,49 @@
-import { Renderable, game, input, state, Text } from "melonjs";
+import {Stage, game, input, state, Text} from "melonjs";
 
-class GameOver extends Renderable {
+class GameOver extends Stage {
   constructor() {
     super(0, 0, game.viewport.width, game.viewport.height);
-    this.floating = true;
-    this.alpha = 0.8;
+    const centerX = game.viewport.width / 2;
+    const titleSize = game.viewport.width * 0.08
 
-    // Create text objects
-    this.gameOverText = new Text(
-      game.viewport.width / 2,
-      game.viewport.height / 2 - 40,
-      {
-        font: "32px Arial",
-        textAlign: "center",
-        text: "GAME OVER",
-      },
-    );
+    this.gameOverText = new Text(centerX, 180, {
+      font: "Arial",
+      size: titleSize,
+      fillStyle: "#FFD700",
+      textAlign: "center",
+      text: "GAME OVER"
+    });
 
-    this.restartText = new Text(
-      game.viewport.width / 2,
-      game.viewport.height / 2 + 40,
-      {
-        font: "24px Arial",
-        textAlign: "center",
-        text: "Press ENTER to restart",
-      },
-    );
+    this.restartText = new Text(centerX, 420, {
+      font: "Arial",
+      fillStyle: "#00FF00",
+      textAlign: "center",
+      text: "Press ENTER to restart"
+    });
+
+    game.world.addChild(this.gameOverText);
+    game.world.addChild(this.restartText);
+
+    input.bindKey(input.KEY.ENTER, "start");
   }
 
-  draw(renderer, viewport) {
-    // Fill with semi-transparent black
-    renderer.setColor("rgba(0, 0, 0, 0.8)");
-    renderer.fillRect(0, 0, this.width, this.height);
+  update() {
+    const centerX = game.viewport.width / 2;
+    this.gameOverText.pos.x = centerX;
+    this.restartText.pos.x = centerX;
 
-    // Draw text
-    this.gameOverText.draw(renderer);
-    this.restartText.draw(renderer);
+    this.gameOverText.alpha = 0.5 + Math.abs(Math.sin(Date.now() / 500));
 
+    if (input.isKeyPressed("start")) {
+      state.change(state.PLAY);
+    }
     return true;
   }
 
-  onActivateEvent() {
-    input.bindKey(input.KEY.ENTER, "restart", true);
-    this.handler = input.registerPointerEvent("pointerdown", this, () => {
-      state.change(state.PLAY, true);
-    });
-
-    // Add key handler for restart
-    this.restart_handler = () => {
-      if (input.isKeyPressed("restart")) {
-        state.change(state.PLAY, true);
-      }
-    };
-
-    // Subscribe to update event
-    state.current().subscribe(this.restart_handler);
-  }
-
-  onDeactivateEvent() {
+  onDestroyEvent() {
     input.unbindKey(input.KEY.ENTER);
-    input.releasePointerEvent("pointerdown", this);
+    game.world.removeChild(this.gameOverText);
+    game.world.removeChild(this.restartText);
   }
 }
 
